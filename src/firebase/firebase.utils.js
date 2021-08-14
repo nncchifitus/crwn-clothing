@@ -12,6 +12,35 @@ const config = {
   measurementId: "G-2RNV3GS9LK",
 };
 
+// Lưu dữ liệu người dùng vào firesotre
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+  if (!userAuth) return;
+
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+
+  // queryReference không có dữ liệu thực của collection hay document, nó chỉ có các thuộc tính cho biết chi tiết về nó
+
+  // snapShot đại diện cho dữ liệu, muốn lấy dữ liệu từ các thuộc tính cần dùng shapshot
+  const snapShot = await userRef.get();
+
+  if (!snapShot.exists) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        createdAt,
+        ...additionalData,
+      });
+    } catch (error) {
+      console.log("error creating user", error.message);
+    }
+  }
+  return userRef;
+};
+
 // Khởi tạo app với cấu hình của project.
 firebase.initializeApp(config);
 
