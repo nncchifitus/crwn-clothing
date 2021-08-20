@@ -1,10 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
 
 import { auth } from "../../firebase/firebase.utils.js";
 import CartIcon from "../cart-icon/cart-icon.component";
 import CartDropdown from "../cart-dropdown/cart-dropdown.component.jsx";
+import { selectCartHidden } from "../../redux/cart/cart.selectors";
+import { selectCurrentUser } from "../../redux/user/user.selectors";
 
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 
@@ -40,17 +43,15 @@ const Header = ({ currentUser, hidden }) => (
 
       <CartIcon />
     </div>
-    {
-      hidden ? null : <CartDropdown />
-    }
+    {hidden ? null : <CartDropdown />}
   </div>
 );
 
-// Duyệt qua tất cả state trong root-reducer để lấy state cần cho component đang xét. 
-// Ở đây ta cần 2 state là user và cart. rename là currentUser và hidden.
-const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
-  currentUser,
-  hidden,
+// Đổi sang selector. Việc lặp đi lặp lại 1 việc nhiều lần thì nên dùng selector có cấu trúc.
+// Thay vì truyền nó dưới dạng 1 hàm chúng ta chỉ truyền nó giống như vậy nơi các thuộc tính mà chúng ta muốn trỏ đến.
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+  hidden: selectCartHidden,
 });
 
 export default connect(mapStateToProps)(Header);
