@@ -22,15 +22,3 @@ export const clearItemFromCart = (item) => ({
   payload: item,
   // Payload là item chúng ta muốn loại khỏi cartItems array
 });
-
-export const increaseQuantityItem = (item) => ({
-  type: CartActionTypes.INCREASE_QUANTITY_ITEM,
-  payload: item,
-  // Payload là item chúng ta muốn tăng số lượng cartItems array
-});
-
-export const decreaseQuantityItem = (item) => ({
-  type: CartActionTypes.DECREASE_QUANTITY_ITEM,
-  payload: item,
-  // Payload là item chúng ta muốn giảm số lượng cartItems array
-});
